@@ -33,8 +33,19 @@ for li in fac_list.find_all("li"):
         # знаходимо текст безпосередньо в контенті елементу  a
         dep_name = li.a.find(string=True, recursive=False)
         # URL складається з базового, та відносного, який записано в атрибуті href
-        dep_url = BASE_URL + a.get("href")
+        dep_url = BASE_URL + li.a.get("href")
 
         print(f"    Назва кафедри: {dep_name}")
         print(f"    URL: {dep_url}")
 
+        #завантажуємо сторінку кафедри
+        dep_page = get(f"{dep_url}/staff", headers=HEADERS)
+        #знаходимо список викладачів
+        soup = BeautifulSoup(dep_page.content,  "html.parser")
+        staff_list = soup.find(class_="page_block").ol
+        #для кожного викладача у списку
+        for li in staff_list.find_all("li"):
+            
+            name = li.find(string=True, recursive=False)
+
+            print(f"            {name}")
