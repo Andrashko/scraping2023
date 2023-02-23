@@ -29,23 +29,27 @@ for li in fac_list.find_all("li"):
     soup = BeautifulSoup(fac_page.content,  "html.parser")
     dep_list = soup.find(class_="departments")
     #для кожної кафедри у списку
-    for li in dep_list.find_all("li"):
-        # знаходимо текст безпосередньо в контенті елементу  a
-        dep_name = li.a.find(string=True, recursive=False)
-        # URL складається з базового, та відносного, який записано в атрибуті href
-        dep_url = BASE_URL + li.a.get("href")
+    if dep_list:
+        for li in dep_list.find_all("li"):
+            # знаходимо текст безпосередньо в контенті елементу  a
+            dep_name = li.a.find(string=True, recursive=False)
+            # URL складається з базового, та відносного, який записано в атрибуті href
+            dep_url = BASE_URL + li.a.get("href")
 
-        print(f"    Назва кафедри: {dep_name}")
-        print(f"    URL: {dep_url}")
+            print(f"    Назва кафедри: {dep_name}")
+            print(f"    URL: {dep_url}")
 
-        #завантажуємо сторінку кафедри
-        dep_page = get(f"{dep_url}/staff", headers=HEADERS)
-        #знаходимо список викладачів
-        soup = BeautifulSoup(dep_page.content,  "html.parser")
-        staff_list = soup.find(class_="page_block").ol
-        #для кожного викладача у списку
-        for li in staff_list.find_all("li"):
-            
-            name = li.find(string=True, recursive=False)
-
-            print(f"            {name}")
+            #завантажуємо сторінку кафедри
+            dep_page = get(f"{dep_url}/staff", headers=HEADERS)
+            #знаходимо список викладачів
+            soup = BeautifulSoup(dep_page.content,  "html.parser")
+            staff_list = soup.find(class_="page_block").ol
+            #для кожного викладача у списку
+            if staff_list:
+                for li in staff_list.find_all("li"):
+                    # на деяких кафедрах ім'я - текст в пункті меню
+                    name = li.find(string=True, recursive=False)
+                    # на інших він додатково обгорнутий в <span>
+                    if not name and li.span:
+                        name = li.span.find(string=True, recursive=False)
+                    print(f"            {name}")
