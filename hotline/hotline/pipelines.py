@@ -8,6 +8,6 @@
 from itemadapter import ItemAdapter
 
 
-class UzhnuPipeline:
+class HotlinePipeline:
     def process_item(self, item, spider):
         return item

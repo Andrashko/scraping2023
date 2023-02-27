@@ -1,4 +1,4 @@
-# Scrapy settings for uzhnu project
+# Scrapy settings for hotline project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,15 +7,14 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "uzhnu"
+BOT_NAME = "hotline"
 
-SPIDER_MODULES = ["uzhnu.spiders"]
-NEWSPIDER_MODULE = "uzhnu.spiders"
+SPIDER_MODULES = ["hotline.spiders"]
+NEWSPIDER_MODULE = "hotline.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
-
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
@@ -46,13 +45,13 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    "uzhnu.middlewares.UzhnuSpiderMiddleware": 543,
+#    "hotline.middlewares.HotlineSpiderMiddleware": 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    "uzhnu.middlewares.UzhnuDownloaderMiddleware": 543,
+#    "hotline.middlewares.HotlineDownloaderMiddleware": 543,
 #}
 
 # Enable or disable extensions
@@ -64,7 +63,7 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    "uzhnu.pipelines.UzhnuPipeline": 300,
+#    "hotline.pipelines.HotlinePipeline": 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
