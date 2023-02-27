@@ -33,3 +33,9 @@ class LaptopsSpider(scrapy.Spider):
                 url=url,
                 image_urls=[f"https://hotline.ua{image_url}"]
             )
+            yield HotlineItem(
+                name=name,
+                price=price,
+                url=url,
+                image_urls=[f"https://hotline.ua{image_url}"]
+            )

@@ -63,9 +63,11 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "scrapy.pipelines.images.ImagesPipeline": 1,
-    "scrapy.pipelines.files.FilesPipeline": 200,
-    "hotline.pipelines.HotlinePipeline": 999,
+    "hotline.pipelines.DuplicatePipeline": 50,
+    # "scrapy.pipelines.images.ImagesPipeline": 100,
+    # "scrapy.pipelines.files.FilesPipeline": 200,
+    "hotline.pipelines.PricePipeline": 300,
+    "hotline.pipelines.FilterPipeline": 400,
 }
 
 FILES_STORE = './file'
