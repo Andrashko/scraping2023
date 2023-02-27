@@ -24,9 +24,12 @@ class LaptopsSpider(scrapy.Spider):
             # та ціну
             price = item.find(class_="price__value").find(
                 string=True, recursive=False)
+            # url картинки
+            image_url = item.find(name="img").get("src")
             # повертаємо результат
             yield HotlineItem(
                 name=name,
                 price=price,
-                url=url
+                url=url,
+                image_urls=[f"https://hotline.ua{image_url}"]
             )
