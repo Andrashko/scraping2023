@@ -56,7 +56,7 @@ class UzhnuSpider(scrapy.Spider):
                 # також повертаємо запит для запуска скрапінгу працівників на сторінці кафедри
                 yield scrapy.Request(
                     # адреса сторінки, яку необхідно парсити
-                    url=dep_url,
+                    url=dep_url+"/staff",
                     # метод для обробки результатів завантаження
                     callback=self.parse_department,
                     # передаємо дані про кафедру в функцію колбеку
