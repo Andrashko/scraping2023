@@ -1,5 +1,6 @@
 import scrapy
 from bs4 import BeautifulSoup
+from lab2.items import FacultyItem
 
 
 class UzhnuSpider(scrapy.Spider):
@@ -11,15 +12,14 @@ class UzhnuSpider(scrapy.Spider):
 
     def parse(self, response):
         soup = BeautifulSoup(response.body,  "html.parser")
-        #знаходимо список факультетів і для кожного факультету
+        # знаходимо список факультетів і для кожного факультету
         fac_list = soup.find(class_="departments_unfolded")
         for li in fac_list.find_all("li"):
             a = li.find("a")
-            # з посилання знаходимо ім'я факультету і кафедри
+            # в <a> знаходимо ім'я і посилання на сторінку факультету
             fac_name = a.find(string=True, recursive=False)
-            fac_link = "https://uzhnu.edu.ua/" + a.get("href")
-            yield {
-                "name": fac_name,
-                "URL": fac_link
-            }
-            
+            fac_link = f"https://uzhnu.edu.ua/{a.get('href')}"
+            yield FacultyItem(
+                name=fac_name,
+                url=fac_link
+            )
