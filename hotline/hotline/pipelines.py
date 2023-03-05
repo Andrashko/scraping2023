@@ -30,6 +30,7 @@ class FilterPipeline:
 class DuplicatePipeline:
     def open_spider(self, spider):
         self.names = []
+        self.duplicates = 0
 
     def is_unique(self, name):
         return not (name in self.names)
@@ -39,4 +40,9 @@ class DuplicatePipeline:
         if self.is_unique(item_name):
             self.names.append(item_name)
             return item
-        raise DropItem(f"Item {item} is duplicate")
+
+        self.duplicates += 1
+        raise DropItem(f"Item {item_name} is duplicate")
+
+    def close_spider(self, spider):
+        spider.logger.debug(f"{self.duplicates} items were duplicated")

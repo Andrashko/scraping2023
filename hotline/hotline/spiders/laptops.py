@@ -6,7 +6,8 @@ from hotline.items import HotlineItem
 class LaptopsSpider(scrapy.Spider):
     name = "laptops"
     allowed_domains = ["hotline.ua"]
-    start_urls = ["https://hotline.ua/ua/computer/noutbuki-netbuki/"]
+    start_urls = [
+        f"https://hotline.ua/ua/computer/noutbuki-netbuki/?p={page}" for page in range(1, 5)]
 
     def parse(self, response):
         soup = BeautifulSoup(response.body,  "html.parser")
@@ -27,12 +28,6 @@ class LaptopsSpider(scrapy.Spider):
             # url картинки
             image_url = item.find(name="img").get("src")
             # повертаємо результат
-            yield HotlineItem(
-                name=name,
-                price=price,
-                url=url,
-                image_urls=[f"https://hotline.ua{image_url}"]
-            )
             yield HotlineItem(
                 name=name,
                 price=price,
