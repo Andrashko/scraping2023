@@ -63,11 +63,12 @@ DOWNLOAD_DELAY = 1
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "hotline.pipelines.DuplicatePipeline": 50,
+    # "hotline.pipelines.DuplicatePipeline": 50,
     # "scrapy.pipelines.images.ImagesPipeline": 100,
     # "scrapy.pipelines.files.FilesPipeline": 200,
-    "hotline.pipelines.FilterPipeline": 300,
+    # "hotline.pipelines.FilterPipeline": 300,
     "hotline.pipelines.PricePipeline": 400,
+    "hotline.pipelines.MySqlPipeline": 500,
 }
 
 FILES_STORE = './file'

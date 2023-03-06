@@ -7,7 +7,7 @@ class LaptopsSpider(scrapy.Spider):
     name = "laptops"
     allowed_domains = ["hotline.ua"]
     start_urls = [
-        f"https://hotline.ua/ua/computer/noutbuki-netbuki/?p={page}" for page in range(1, 5)]
+        f"https://hotline.ua/ua/computer/noutbuki-netbuki/?p={page}" for page in range(1, 2)]
 
     def parse(self, response):
         soup = BeautifulSoup(response.body,  "html.parser")
