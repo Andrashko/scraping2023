@@ -7,6 +7,51 @@
 # useful for handling different item types with a single interface
 from scrapy.exceptions import DropItem
 from mysql.connector import connect
+from sqlite3 import connect
+
+
+class SqlitePipeline:
+    def open_spider(self, spider):
+        self.connection = connect("items.db")
+        self.cursor = self.connection.cursor()
+        spider.logger.info("Connected to Sqlite ")
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS 
+        items (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            name TEXT NOT NULL,
+            price FLOAT DEFAULT 0,
+            url TEXT
+        );""")
+        spider.logger.info("DB is ready ")
+
+    def close_spider(self, spider):
+        self.connection.close()
+        spider.logger.info("Disconnected from Sqlite ")
+
+    def process_item(self, item, spider):
+        if self.is_duplicate(item):
+            self.cursor.execute("""
+                                    UPDATE items
+                                    SET price = ?
+                                    WHERE name = ?
+                                    """,
+                                [item.get("price"), item.get("name")]
+                                )
+        else:
+            self.cursor.execute(
+                "INSERT INTO items (name, price, url) VALUES (?, ?, ?);",
+                [item.get("name"), item.get("price"), item.get("url")])
+
+        self.connection.commit()
+        return item
+
+    def is_duplicate(self, item):
+        self.cursor.execute(
+            "SELECT COUNT(id) FROM items WHERE name = ?;",
+            [item.get("name")])
+        count = self.cursor.fetchone()[0]
+        return count > 0
 
 
 class MySqlPipeline:
@@ -18,9 +63,11 @@ class MySqlPipeline:
         )
         self.cursor = self.connection.cursor()
         spider.logger.info("Connected to MySQL ")
-        self.cursor.execute("CREATE DATABASE IF NOT EXISTS scrapy;")
-        self.cursor.execute("USE scrapy;")
-        self.cursor.execute("""CREATE TABLE IF NOT EXISTS items (
+        # self.cursor.execute("CREATE DATABASE IF NOT EXISTS scrapy;")
+        # self.cursor.execute("USE scrapy;")
+        self.cursor.execute("""
+        CREATE TABLE IF NOT EXISTS 
+        items (
             id INT AUTO_INCREMENT,
             PRIMARY KEY (id),
             name VARCHAR(50) NOT NULL,
@@ -35,10 +82,18 @@ class MySqlPipeline:
 
     def process_item(self, item, spider):
         if self.is_duplicate(item):
-            raise DropItem(f"Item {item.get('name')} is already in database")
-        self.cursor.execute(
-            "INSERT INTO items (name, price, url) VALUES (%s, %s, %s);",
-            [item.get("name"), item.get("price"), item.get("url")])
+            self.cursor.execute("""
+                                    UPDATE items
+                                    SET price = %s
+                                    WHERE name = %s
+                                    """,
+                                [item.get("price"), item.get("name")]
+                                )
+        else:
+            self.cursor.execute(
+                "INSERT INTO items (name, price, url) VALUES (%s, %s, %s);",
+                [item.get("name"), item.get("price"), item.get("url")])
+
         self.connection.commit()
         return item
 
