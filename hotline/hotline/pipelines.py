@@ -6,13 +6,13 @@
 
 # useful for handling different item types with a single interface
 from scrapy.exceptions import DropItem
-from mysql.connector import connect
-from sqlite3 import connect
+import mysql.connector
+import sqlite3
 
 
 class SqlitePipeline:
     def open_spider(self, spider):
-        self.connection = connect("items.db")
+        self.connection = sqlite3.connect("items.db")
         self.cursor = self.connection.cursor()
         spider.logger.info("Connected to Sqlite ")
         self.cursor.execute("""
@@ -56,10 +56,11 @@ class SqlitePipeline:
 
 class MySqlPipeline:
     def open_spider(self, spider):
-        self.connection = connect(
+        self.connection = mysql.connector.connect(
             host="localhost",
             user="root",
-            password=""
+            password="",
+            database="scrapy"
         )
         self.cursor = self.connection.cursor()
         spider.logger.info("Connected to MySQL ")

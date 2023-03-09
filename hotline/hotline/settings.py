@@ -69,6 +69,7 @@ ITEM_PIPELINES = {
     # "hotline.pipelines.FilterPipeline": 300,
     "hotline.pipelines.PricePipeline": 400,
     "hotline.pipelines.MySqlPipeline": 500,
+    "hotline.pipelines.SqlitePipeline": 600,
 }
 
 FILES_STORE = './file'
