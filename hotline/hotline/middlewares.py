@@ -4,9 +4,12 @@
 # https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
-
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
+
+from scrapy.http import JsonRequest
+from scrapy.utils.serialize import ScrapyJSONEncoder
+from json import dumps, loads
 
 
 class HotlineSpiderMiddleware:
@@ -33,8 +36,40 @@ class HotlineSpiderMiddleware:
         # it has processed the response.
 
         # Must return an iterable of Request, or item objects.
+        url = spider.settings.get("POST_URL")
+
         for i in result:
+            # якщо павук повернув item
+            if is_item(i):
+                # надсилаємо JSON POST запит
+                yield JsonRequest(
+                    url=url,  # на адресу сервера,
+                    method="POST",
+                    #в заголовок додаємо токен
+                    headers={
+                        "Authorization": f"Bearer {self.token}"
+                    },
+                    # в тіло запиту записуємо декодовну item
+                    body=self.item_to_json(i),
+                    # вказуєм обробник відповіді. Якщо нічого не вказати то обробку передасть в spider.parse
+                    callback=self.after_post
+                )
+                pass
             yield i
+
+    # робимо копію методу декодування ScrapyItem до JSON
+    encode = ScrapyJSONEncoder().encode
+
+    def item_to_json(self, item):
+        body = {
+            "Name": item.get("name"),
+            "Price": float(item.get("price")),
+            "Url": item.get("url")
+        }
+        return self.encode(body)
+
+    def after_post(self, response):
+        pass
 
     def process_spider_exception(self, response, exception, spider):
         # Called when a spider or process_spider_input() method
@@ -49,8 +84,31 @@ class HotlineSpiderMiddleware:
         # that it doesn’t have a response associated.
 
         # Must return only requests (not items).
+
+        # надсилаємо JSON POST запит для отримання токена
+
+        url = spider.settings.get("TOKEN_URL")
+        login = spider.settings.get("TOKEN_LOGIN")
+        password = spider.settings.get("TOKEN_PASSWORD")
+
+        yield JsonRequest(
+            url=url,
+            method="POST",
+            body=dumps({
+                "Login": login,
+                "Password": password
+            }),
+            # вказуєм обробник відповіді. Якщо нічого не вказати то обробку передасть в spider.parse
+            callback=self.save_token
+        )
+
         for r in start_requests:
             yield r
+
+    def save_token(self, response):
+        token = loads(response.body).get("token")
+        print(f"Token: {token}")
+        self.token = token
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s" % spider.name)
