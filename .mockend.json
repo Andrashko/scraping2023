@@ -6,7 +6,7 @@
     "name": { "string": {} },
     "url": { "regexp": "https://…" }
   },
-  "Goods":{
+  "Item":{
     "_": { 
       "items": 5
     },
