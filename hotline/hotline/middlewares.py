@@ -54,7 +54,6 @@ class HotlineSpiderMiddleware:
                     # вказуєм обробник відповіді. Якщо нічого не вказати то обробку передасть в spider.parse
                     callback=self.after_post
                 )
-                pass
             yield i
 
     # робимо копію методу декодування ScrapyItem до JSON

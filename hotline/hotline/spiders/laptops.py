@@ -13,8 +13,7 @@ class LaptopsSpider(scrapy.Spider):
         soup = BeautifulSoup(response.body,  "html.parser")
 
         # знаходимо список товарів
-        items = soup.find(
-            name="div", class_="list-body__content").find_all(class_="list-item")
+        items = soup.find(   name="div", class_="list-body__content").find_all(class_="list-item")
         # Для кожного товару
         for item in items:
             # Знаходимо назву

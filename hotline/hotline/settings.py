@@ -45,7 +45,7 @@ DOWNLOAD_DELAY = 1
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
-   "hotline.middlewares.HotlineSpiderMiddleware": 543,
+#    "hotline.middlewares.HotlineSpiderMiddleware": 543,
 }
 
 # Enable or disable downloader middlewares
@@ -64,10 +64,10 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     # "hotline.pipelines.DuplicatePipeline": 50,
-    # "scrapy.pipelines.images.ImagesPipeline": 100,
+    "scrapy.pipelines.images.ImagesPipeline": 100,
     # "scrapy.pipelines.files.FilesPipeline": 200,
     # "hotline.pipelines.FilterPipeline": 300,
-    # "hotline.pipelines.PricePipeline": 400,
+    "hotline.pipelines.PricePipeline": 400,
     # "hotline.pipelines.MySqlPipeline": 500,
     # "hotline.pipelines.SqlitePipeline": 600,
 }

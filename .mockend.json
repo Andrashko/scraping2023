@@ -1,17 +1,21 @@
 {
-  "User": {
-    "_": {
-      // Define how many items you need 
-      "items": 50,
-      // Optionally set custom values
-      "data": [
-	{ "name": "John Doe", "online": true, "picture": "https://…" }
-      ]
+  "Shop": {
+    "_": { 
+      "items": 5
     },
-    // Use random generators to fill your data
     "name": { "string": {} },
-    "online": { "boolean": {} },
-    "picture": { "regexp": "https://…" },
-    "posts": { "hasMany": "Post" }
+    "url": { "regexp": "https://…" }
+  },
+  "Goods":{
+    "_": { 
+      "items": 5
+    },
+    "name": { "string": {} },
+    "url": { "regexp": "https://…" },
+    "price": {"int":{  
+      "min": 0,
+      "max": 10000
+      }
+    }
   }
 }
